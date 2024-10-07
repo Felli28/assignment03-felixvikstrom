@@ -9,7 +9,7 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch code/Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
          
       - name: Install dependencies
@@ -28,13 +28,14 @@ jobs:
         run: npx wait-on http://localhost:3000
 
       - name: Run tests
-        run: npm run run-tests
+        run: npm run test # Kontrollera att det här är rätt kommando i din package.json
 
       - name: Save test results as artifacts
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: path/to/test-results
+          path: test-results/ # Korrigera sökvägen om dina resultat sparas någon annanstans
+
 
           
 
