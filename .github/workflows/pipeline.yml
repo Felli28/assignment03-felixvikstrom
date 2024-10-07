@@ -30,7 +30,7 @@ jobs:
       - name: Run tests
         run: npm run run-tests
 
-      - name: Save test results as artifacts
+      - name: Save test results as artifact
         uses: actions/upload-artifact@v2
         with:
           name: test-results
