@@ -27,7 +27,7 @@ jobs:
       - name: Wait until the application is up
         run: npx wait-on http://localhost:3000
 
-      - name: Run tests
+      - name: Run test
         run: npm run run-tests
 
       - name: Save test results as artifacts
