@@ -28,7 +28,7 @@ jobs:
         run: npx wait-on http://localhost:3000
 
       - name: Run test
-        run: npm run run-tests
+        run: npm run run-test
 
       - name: Save test results as artifacts
         uses: actions/upload-artifact@v4
