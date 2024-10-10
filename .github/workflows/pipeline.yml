@@ -1,10 +1,3 @@
-name: Pipeline
-on:
-  push:
-    branches:
-      - main
-      - gh-actions
-
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
@@ -14,6 +7,9 @@ jobs:
          
       - name: Install dependencies
         run: npm install
+
+      - name: Install Playwright dependencies
+        run: npx playwright install-deps
 
       - name: Install Playwright
         run: npx playwright install
@@ -29,13 +25,11 @@ jobs:
 
       - name: Run test
         run: npm run run-test
-        env:
-          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 
       - name: Save test results as artifacts
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: path/to/test-results
+
 
