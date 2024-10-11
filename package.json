@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "run-test": "npx playwright test",
+    "run-test": "npx playwright test --project=chromium --project=firefox",
     "ui-mode": "npx playwright test --ui"
   },
   "keywords": [],
