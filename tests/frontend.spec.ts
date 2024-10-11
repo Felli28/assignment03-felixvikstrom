@@ -43,3 +43,9 @@ test('Add client on the clients page', async ({ page }) => {
   await page.waitForURL('http://localhost:3000/clients');
   await expect(page.locator('text=Adam Jalla')).toBeVisible();
 });
+
+
+
+
+
+
