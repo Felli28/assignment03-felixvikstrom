@@ -4,7 +4,7 @@ import { DashboardPage } from './pages/dashboard.page';
 import { ClientsPage } from './pages/clients.page';
 
 test.describe.serial('Add and delete client tests', () => {
-  test('Login and add a new client', async ({ page }) => {
+  test('1.Login and add a new client', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
     const clientsPage = new ClientsPage(page);
@@ -28,7 +28,7 @@ test.describe.serial('Add and delete client tests', () => {
     await expect(newClient).toBeVisible();
   });
 
-  test('Login and delete Adam Strong', async ({ page }) => {
+  test('2.Login and delete Adam Strong', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
     const clientsPage = new ClientsPage(page);
