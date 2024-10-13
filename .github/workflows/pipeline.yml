@@ -22,7 +22,8 @@ jobs:
         run: npx playwright install
         
       - name: Pull Docker image
-        run: docker pull rasilva1986/my-vue-app:v1
+        run: docker run -d -p 8080:80 rasilva1986/my-vue-app:v1
+
 
       - name: Start the application
         run: docker run -d -p 3000:3000 rasilva1986/my-vue-app:v1

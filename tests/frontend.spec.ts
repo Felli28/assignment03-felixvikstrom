@@ -1,49 +1,61 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from './pages/login.page';
+import { DashboardPage } from './pages/dashboard.page';
+import { ClientsPage } from './pages/clients.page';
 
-test('Add client on the clients page', async ({ page }) => {
-  // Gå till inloggningssidan
-  await page.goto('http://localhost:3000/login');
+test.describe.serial('Add and delete client tests', () => {
+  test('Login and add a new client', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const dashboardPage = new DashboardPage(page);
+    const clientsPage = new ClientsPage(page);
 
-  // Vänta på att inloggningsfälten är tillgängliga och fyll i dem
-  await page.fill('input[type="text"]', process.env.TEST_USERNAME || 'tester01');
-  await page.fill('input[type="password"]', process.env.TEST_PASSWORD || 'GteteqbQQgSr88SwNExUQv2ydb7xuf8c');
+    const username = process.env.TEST_USERNAME || 'defaultUsername';
+    const password = process.env.TEST_PASSWORD || 'defaultPassword';
 
-  // Klicka på login-knappen
-  await page.getByRole('button', { name: 'Login' }).click();
+    await loginPage.navigate();
+    await loginPage.login(username, password);
+    await page.waitForLoadState('networkidle');
+    await dashboardPage.goToClients();
+    await clientsPage.goToCreateClient();
 
-  // Verifiera att inloggningen lyckades genom att kontrollera URL
-  await expect(page).toHaveURL('http://localhost:3000/');
+    await page.fill('label:has-text("Name") + input', 'Adam Strong');
+    await page.fill('label:has-text("Email") + input', 'adam@example.com');
+    await page.fill('label:has-text("Telephone") + input', '123456789');
 
-  // Använd korrekt locator för att navigera till klientsidan
-  await page.locator('div').filter({ hasText: /^Clients/ }).getByRole('link').click();
+    await page.locator('a.btn.blue').click();
 
-  // Verifiera att vi navigerat till klientsidan
-  await expect(page).toHaveURL('http://localhost:3000/clients');
+    const newClient = page.locator('text=Adam Strong');
+    await expect(newClient).toBeVisible();
+  });
 
-  // Klicka på "Create Client"
-  await page.getByRole('link', { name: 'Create Client' }).click();
+  test('Login and delete Adam Strong', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const dashboardPage = new DashboardPage(page);
+    const clientsPage = new ClientsPage(page);
 
-  // Vänta tills vi är på sidan för att skapa en ny klient
-  await page.waitForURL('http://localhost:3000/client/new');
+    const username = process.env.TEST_USERNAME || 'defaultUsername';
+    const password = process.env.TEST_PASSWORD || 'defaultPassword';
 
-  // Fyll i namn, e-post och telefonnummer
-  await page.locator('input[type="text"]').nth(0).fill('Adam Jalla');
-  await page.locator('input[type="email"]').fill('adam.jalla@example.com');
-  await page.locator('input[type="text"]').nth(1).fill('070 123 4567');
+    await loginPage.navigate();
+    await loginPage.login(username, password);
+    await page.waitForLoadState('networkidle');
+    await dashboardPage.goToClients();
 
-  // Vänta tills "Save"-knappen är synlig och klickbar
-  const saveButton = page.locator('a.btn.blue:has-text("Save")');
-  await expect(saveButton).toBeVisible({ timeout: 10000 });
-  await expect(saveButton).toBeEnabled({ timeout: 10000 });
+    const client = page.getByText(/Adam Strong/);
+    await client.waitFor({ state: 'visible', timeout: 10000 });
+    await client.click();
 
-  // Klicka på "Save"
-  await saveButton.click();
+    const menuButton = page.getByRole('img').nth(2);
+    await menuButton.waitFor({ state: 'visible', timeout: 10000 });
+    await menuButton.click();
 
-  // Verifiera att klienten har lagts till och är synlig på klientsidan
-  await page.waitForURL('http://localhost:3000/clients');
-  await expect(page.locator('text=Adam Jalla')).toBeVisible();
+    const deleteButton = page.getByText('Delete');
+    await deleteButton.waitFor({ state: 'visible', timeout: 10000 });
+    await deleteButton.click();
+
+    await expect(page.locator('text=Adam Strong')).not.toBeVisible({ timeout: 10000 });
+  });
 });
-
 
 
 
