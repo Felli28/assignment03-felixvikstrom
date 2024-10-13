@@ -8,11 +8,11 @@ export class LoginPage {
     await this.page.goto('http://localhost:3000/login');
   }
 
-  // Fyll i användarnamn och lösenord och logga in
+  
   async login(username: string, password: string) {
-    await this.page.fill('input[type="text"]', username); // Fyll i användarnamn
-    await this.page.fill('input[type="password"]', password); // Fyll i lösenord
-    await this.page.getByRole('button', { name: 'Login' }).click(); // Klicka på login-knappen
+    await this.page.fill('input[type="text"]', username); 
+    await this.page.fill('input[type="password"]', password); 
+    await this.page.getByRole('button', { name: 'Login' }).click(); 
   }
 }
 
